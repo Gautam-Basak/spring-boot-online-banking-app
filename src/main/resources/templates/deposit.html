@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="common/header :: common-header" />
+
+<body onload="getAccountBalance()" roleId="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+	<head th:replace="common/header :: navbar" />
+	<div class="container main">
+
+		<div>
+
+			<!--<div class="col-lg-6 col-md-6">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<h2>Primary Balance: </h2>
+							</div>
+							<div class="col-xs-6 text-right">
+								<h1><i class="fa fa-usd" aria-hidden="true"></i></h1>
+								<input type="button" id="loadAmount" class="btn btn-primary" value="Load"></input>
+							</div>
+							<div>
+								<input type="text" id="pAmount"></input>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>-->
+
+			<div class="col-lg-6 col-md-6">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<h1> Primary Balance:<span id="pAmount"></span></h1>
+							</div>
+							<div class="col-xs-6 text-right">
+								<h1><i class="fa fa-usd" aria-hidden="true"></i></h1>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix" id="res">Total Balance:</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<form th:action="@{/account/deposit}" method="post">
+						<div class="form-group">
+							<label for="accountType">1. Please select the account you would like to deposit:</label>
+							<select class="form-control" th:value="${accountType}" name="accountType" id="accountType"
+								required="required" autofocus="autofocus">
+								<option disabled="disabled" selected="selected"> -- select your account -- </option>
+								<option>Primary</option>
+								<option>Savings</option>
+							</select>
+							<br />
+						</div>
+
+						<div class="form-group">
+							<label>2. Please specify the amount you would like to deposit: </label>
+							<span class="input-group-addon">Amount $</span>
+							<input onkeyup="add()" th:value="${amount}" type="text" name="amount" id="amount"
+								class="form-control" aria-label="Amount (to the nearest dollar)" />
+						</div>
+
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+						<button class="btn btn-lg btn-primary btn-block" type="submit">Deposit</button>
+					</form>
+
+					<div class="col-md-6">
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+		
+			<script type="text/javascript">
+			
+			function getAccountBalance(){
+				$.ajax({
+					type : "GET",
+					url : window.location + "/getBalanceAmount",
+					success : function(data){
+						$("#dAmount").html(data);
+					}
+				})
+			}
+			
+			</script>-->
+
+
+		<script src="https://code.jquery.com/jquery-3.6.0.js"
+			integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+
+
+		<!--<script type="text/javascript">
+			
+			var buttonLoad;
+			
+			$(document).ready(function(){
+				buttonLoad = $("#loadAmount")
+				
+				buttonLoad.click(function(){
+					loadedAmount();
+				});
+			});
+			
+			function loadedAmount(){
+				url =  window.location + "/getAmount";
+				$.get(url, function(responseJSon){
+					
+					$("#pAmount").val(responseJSon);
+			
+					});		
+			}
+			
+			</script>-->
+
+
+		<script type="text/javascript">
+
+			function getAccountBalance() {
+				url = window.location + "/getAmount";
+				$.get(url, function (responseJSon) {
+
+					//For input="text" type of filed
+					//$("#pAmount").val(responseJSon);
+					
+					//To parse the data directly in div
+					document.getElementById("pAmount").innerHTML = responseJSon;
+
+				});
+			}
+
+		</script>
+
+		<script type="text/javascript">
+
+			function add() {
+
+				var a = parseInt(document.getElementById("pAmount").innerText);
+				var b = parseInt(document.getElementById("amount").value);
+
+				var c = a + b;
+				c = c || a;
+				document.getElementById("res").innerHTML = c;
+			}
+
+		</script>
+
+		<div th:replace="common/header :: body-bottom-scripts" />
+
+	</div>
+</body>
+
+</html>
